@@ -6,7 +6,7 @@ const AddTransaction = () => {
   const { addIncome, addExpense } = useContext(GlobalContext);
   const [income, setIncome] = useState({
     incomeText: "",
-    incomeAmount: 0,
+    incomeAmount: "",
   });
 
   const { incomeText, incomeAmount } = income;
@@ -16,17 +16,23 @@ const AddTransaction = () => {
   };
   const heandleSubmit = (e) => {
     e.preventDefault();
-    const newIncomeTransaction = {
-      id: uuidv4(),
-      incomeText,
-      incomeAmount: +incomeAmount,
-    };
-    addIncome(newIncomeTransaction);
+    if (incomeText !== "") {
+      const newIncomeTransaction = {
+        id: uuidv4(),
+        incomeText,
+        incomeAmount: +incomeAmount,
+      };
+      addIncome(newIncomeTransaction);
+      setIncome({
+        incomeText: "",
+        incomeAmount: "",
+      });
+    }
   };
 
   const [expense, setExpense] = useState({
     expenseText: "",
-    expenseAmount: 0,
+    expenseAmount: "",
   });
 
   const { expenseText, expenseAmount } = expense;
@@ -36,12 +42,18 @@ const AddTransaction = () => {
   };
   const expenseSubmit = (e) => {
     e.preventDefault();
-    const newExpenseTransaction = {
-      id: uuidv4(),
-      expenseText,
-      expenseAmount: +expenseAmount,
-    };
-    addExpense(newExpenseTransaction);
+    setExpense({
+      expenseText: "",
+      expenseAmount: "",
+    });
+    if (expenseText !== "") {
+      const newExpenseTransaction = {
+        id: uuidv4(),
+        expenseText,
+        expenseAmount: +expenseAmount,
+      };
+      addExpense(newExpenseTransaction);
+    }
   };
 
   return (
@@ -49,6 +61,7 @@ const AddTransaction = () => {
       <form onSubmit={heandleSubmit}>
         <div className="input-group income">
           <input
+            value={incomeText}
             name="incomeText"
             type="text"
             placeholder="Add income.."
@@ -56,6 +69,7 @@ const AddTransaction = () => {
             onChange={onChangeIncome}
           />
           <input
+            value={incomeAmount}
             name="incomeAmount"
             type="number"
             placeholder="Amount"
@@ -69,6 +83,7 @@ const AddTransaction = () => {
       <form onSubmit={expenseSubmit}>
         <div className="input-group expense">
           <input
+            value={expenseText}
             name="expenseText"
             type="text"
             placeholder="Add Expense.."
@@ -76,6 +91,7 @@ const AddTransaction = () => {
             onChange={onChangeExpense}
           />
           <input
+            value={expenseAmount}
             name="expenseAmount"
             type="number"
             placeholder="Amount"
